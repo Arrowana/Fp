@@ -1,0 +1,61 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="FriendList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="username"
+        android:ems="10"
+        android:id="@+id/searchET"
+        android:layout_below="@id/textView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Find"
+        android:id="@+id/findButton"
+        android:layout_below="@id/textView"
+        android:layout_toEndOf="@id/searchET"
+        android:layout_marginBottom="20sp"/>
+
+    <TextView
+        android:text="Username doesn't exist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/usernameTV"
+        android:layout_below="@id/findButton"
+        android:visibility="gone"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:id="@+id/addButton"
+        android:layout_below="@id/findButton"
+        android:layout_toEndOf="@id/usernameTV"
+        android:visibility="gone"/>
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="10sp"
+        android:layout_below="@id/usernameTV"
+        android:background="#0FFFFF"
+        android:layout_marginTop="35sp"
+        android:id="@+id/separator"/>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/friendList"
+        android:layout_below="@id/separator" />
+
+</RelativeLayout>
