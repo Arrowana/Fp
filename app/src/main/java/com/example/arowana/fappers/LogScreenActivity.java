@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -19,7 +21,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LogScreenActivity extends Activity implements AsyncResponse {
+public class LogScreenActivity extends GCMActivity implements AsyncResponse {
+
+    final private String URL = Config.URL;
 
     private Button signinButton;
     private TextView usernameTV;
@@ -41,7 +45,7 @@ public class LogScreenActivity extends Activity implements AsyncResponse {
         //Read data in shared Preferences
         SharedPreferences prefs = this.getSharedPreferences("fappers", this.MODE_PRIVATE);
         //User stored
-        if(prefs.contains("id")) {
+        if(prefs.contains("id")){
             Intent intent = new Intent(LogScreenActivity.this, MainActivity.class);
             Log.v("FP", "To MainActivity");
             startActivity(intent);
@@ -57,10 +61,11 @@ public class LogScreenActivity extends Activity implements AsyncResponse {
                 nameValuePairs.add(new BasicNameValuePair("action", "signin"));
                 nameValuePairs.add(new BasicNameValuePair("username", usernameTV.getText().toString()));
                 nameValuePairs.add(new BasicNameValuePair("password", passwordTV.getText().toString()));
+                nameValuePairs.add(new BasicNameValuePair("registration_id", getRegid()));
 
                 passwordTV.setText("");
 
-                HttpAsyncTask myTask = new HttpAsyncTask("http://10.0.2.2/fp/", LogScreenActivity.this);
+                HttpAsyncTask myTask = new HttpAsyncTask(URL, LogScreenActivity.this);
                 myTask.execute(nameValuePairs);
             }
         });
@@ -73,8 +78,8 @@ public class LogScreenActivity extends Activity implements AsyncResponse {
                 startActivity(intent);
             }
         });
-
     }
+
 
     @Override
     public void processFinish(String result){
@@ -86,6 +91,7 @@ public class LogScreenActivity extends Activity implements AsyncResponse {
         String username = null;
         String password = null;
         try {
+            Log.v("FP", "Message reçu : " + result);
             jsonObject = new JSONObject(result);
             success = jsonObject.getString("success");
             id = jsonObject.getString("id");
@@ -98,7 +104,6 @@ public class LogScreenActivity extends Activity implements AsyncResponse {
 
         if(success.equals("1")){
             Intent intent = new Intent(LogScreenActivity.this, MainActivity.class);
-            Log.v("FP", "Message reçu : " + result);
 
             //Store user in SharedPreferences
             SharedPreferences prefs = this.getSharedPreferences("fappers", this.MODE_PRIVATE);

@@ -28,6 +28,8 @@ import java.util.List;
 
 public class FriendActivity extends Activity implements AsyncResponse {
 
+    final private String URL = Config.URL;
+
     private ListView friendList;
     private FriendAdapter friends;
     private EditText searchET;
@@ -79,7 +81,7 @@ public class FriendActivity extends Activity implements AsyncResponse {
                     nameValuePairs.add(new BasicNameValuePair("action", "search"));
                     nameValuePairs.add(new BasicNameValuePair("username", searchET.getText().toString()));
 
-                    HttpAsyncTask myTask = new HttpAsyncTask("http://10.0.2.2/fp/", FriendActivity.this);
+                    HttpAsyncTask myTask = new HttpAsyncTask(URL, FriendActivity.this);
                     myTask.execute(nameValuePairs);
                 }
                 else{
@@ -101,7 +103,7 @@ public class FriendActivity extends Activity implements AsyncResponse {
 
                 newUser = searchET.getText().toString();
 
-                HttpAsyncTask myTask = new HttpAsyncTask("http://10.0.2.2/fp/", FriendActivity.this);
+                HttpAsyncTask myTask = new HttpAsyncTask(URL, FriendActivity.this);
                 myTask.execute(nameValuePairs);
             }
         });
