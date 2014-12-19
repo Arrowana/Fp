@@ -1,4 +1,4 @@
-package com.example.arowana.fappers;
+package com.arowana.fappers;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -11,6 +11,9 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * This {@code IntentService} does the actual handling of the GCM message.
@@ -55,15 +58,24 @@ public class GcmIntentService extends IntentService {
                     Log.i(TAG, "Working... " + (i + 1)
                             + "/5 @ " + SystemClock.elapsedRealtime());
                     try {
-                        Thread.sleep(5000);
+                        //WHY SLEEPING???
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                     }
                 }
                 Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
-                // Post notification of received message.
-                sendNotification("Received: " + extras.toString());
-                sendNotification("A friend fapped, and it was good!");
                 Log.i(TAG, "Received: " + extras.toString());
+
+                String action = extras.getString("action","none");
+
+                if(action.equals("fapped")){
+                    // Post notification of received message.
+                    sendNotification("Received: " + extras.toString());
+                    sendNotification("A friend fapped, and it was good!");
+                } else if(action.equals("addFriend")){
+                    String username = extras.getString("username", "Yolo");
+                    sendNotification(username + " want to be your friend!");
+                }
             }
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.

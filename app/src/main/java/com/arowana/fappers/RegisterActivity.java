@@ -1,6 +1,5 @@
-package com.example.arowana.fappers;
+package com.arowana.fappers;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RegisterActivity extends GCMActivity implements AsyncResponse{
+public class RegisterActivity extends GCMActivity implements AsyncResponse {
 
     final private String URL = Config.URL;
 

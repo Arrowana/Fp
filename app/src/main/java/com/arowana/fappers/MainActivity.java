@@ -1,41 +1,27 @@
-package com.example.arowana.fappers;
+package com.arowana.fappers;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends GCMActivity implements AsyncResponse {
 
     final private String URL = Config.URL;
-
-    public static final String EXTRA_MESSAGE = "message";
-    public static final String PROPERTY_REG_ID = "registration_id";
-    private static final String PROPERTY_APP_VERSION = "appVersion";
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    String SENDER_ID = "124659174182";
 
     /**
      * Tag used on log messages.
@@ -47,9 +33,6 @@ public class MainActivity extends GCMActivity implements AsyncResponse {
     private TextView usernameTV;
     private Button logoutButton;
     private Button fpButton;
-
-    private GoogleCloudMessaging gcm;
-    private String regid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +70,16 @@ public class MainActivity extends GCMActivity implements AsyncResponse {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "fpButton onClick");
+
+                progress = ProgressDialog.show(MainActivity.this, "Chargement", "Veuillez patienter");
+
+                // Add data to nameValuePairs
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                nameValuePairs.add(new BasicNameValuePair("action", "fapped"));
+                nameValuePairs.add(new BasicNameValuePair("id", id));
+
+                HttpAsyncTask myTask = new HttpAsyncTask(URL, MainActivity.this);
+                myTask.execute(nameValuePairs);
             }
         });
 
@@ -109,13 +102,29 @@ public class MainActivity extends GCMActivity implements AsyncResponse {
     * */
     @Override
     public void processFinish(String result) {
-        Intent intent = new Intent(MainActivity.this, FriendActivity.class);
-        Log.v(TAG, "Message reçu : " + result);
-        intent.putExtra("friendsJson", result);
-
+        Log.v("FP", "Message reçu : " + result);
         progress.dismiss();
 
-        startActivity(intent);
+        JSONObject jsonObject = null;
+        String action = null;
+        String success = "0";
+        String id = null;
+        try {
+            jsonObject = new JSONObject(result);
+            action = jsonObject.getString("action");
+            success = jsonObject.getString("success");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if(success.equals("1")){
+            if(action.equals("friends")){
+                Intent intent = new Intent(MainActivity.this, FriendActivity.class);
+                intent.putExtra("friendsJson", result);
+
+                startActivity(intent);
+            }
+        }
     }
 
     @Override

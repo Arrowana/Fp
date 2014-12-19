@@ -1,4 +1,4 @@
-package com.example.arowana.fappers;
+package com.arowana.fappers;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -10,11 +10,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HttpAsyncTask extends AsyncTask<List<NameValuePair>, Integer, Double> {

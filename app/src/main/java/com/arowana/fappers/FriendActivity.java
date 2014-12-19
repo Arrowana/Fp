@@ -1,13 +1,10 @@
-package com.example.arowana.fappers;
+package com.arowana.fappers;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,8 +26,8 @@ import java.util.List;
 public class FriendActivity extends Activity implements AsyncResponse {
 
     final private String URL = Config.URL;
-
-    private ListView friendList;
+    private String id;
+    private ListView friendListView;
     private FriendAdapter friends;
     private EditText searchET;
     private Button findButton;
@@ -38,8 +35,8 @@ public class FriendActivity extends Activity implements AsyncResponse {
     private Button addButton;
     private ProgressDialog progress;
     private String idFriend;
-    private String newUser;
     private String[] friendStrings = null;
+    private ArrayList<User> friendList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +48,7 @@ public class FriendActivity extends Activity implements AsyncResponse {
         //Read data in shared Preferences
         final SharedPreferences prefs = this.getSharedPreferences("fappers", this.MODE_PRIVATE);
         final String username=prefs.getString("username", "Error");
-        final String id=prefs.getString("id", "Error");
+        id=prefs.getString("id", "Error");
 
         searchET = (EditText) findViewById(R.id.searchET);
         findButton = (Button) findViewById(R.id.findButton);
@@ -59,17 +56,20 @@ public class FriendActivity extends Activity implements AsyncResponse {
         usernameTV = (TextView) findViewById(R.id.usernameTV);
         addButton = (Button) findViewById(R.id.addButton);
 
-        friendList = (ListView) findViewById(R.id.friendList);
+        friendListView = (ListView) findViewById(R.id.friendList);
 
         findButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 boolean contains = false;
-                for(String user : friendStrings){
-                    if(user.equals(searchET.getText().toString())){
+
+                //Checks if username already in friendList
+                for(User friend : friendList){
+                    if(friend.getName().equals(searchET.getText().toString())){
                         contains=true;
                     }
                 }
+
                 //Checks if already friends
                 if(!contains) {
                     usernameTV.setVisibility(View.GONE);
@@ -101,37 +101,14 @@ public class FriendActivity extends Activity implements AsyncResponse {
                 nameValuePairs.add(new BasicNameValuePair("id", id));
                 nameValuePairs.add(new BasicNameValuePair("idFriend", idFriend));
 
-                newUser = searchET.getText().toString();
+                //newUser = searchET.getText().toString();
 
                 HttpAsyncTask myTask = new HttpAsyncTask(URL, FriendActivity.this);
                 myTask.execute(nameValuePairs);
             }
         });
 
-        //Reading friend list from JSON and populating ListView
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(friendsJson);
-
-            JSONArray jsonArray = jsonObject.getJSONArray("friends");
-
-            friendStrings = new String[jsonArray.length()];
-            String[] idStrings = new String[jsonArray.length()];
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                friendStrings[i] = jsonArray.getJSONObject(i).getString("username");
-                idStrings[i] = jsonArray.getJSONObject(i).getString("id");
-            }
-
-            //Put Strings inside ArrayList so we can use add on ArrayAdapter
-            ArrayList<String> list=new ArrayList<String>();
-            list.addAll(Arrays.asList(friendStrings));
-            friends = new FriendAdapter(this, list);
-            friendList.setAdapter(friends);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        buildFriendListView(friendsJson);
     }
 
     @Override
@@ -177,8 +154,15 @@ public class FriendActivity extends Activity implements AsyncResponse {
                 usernameTV.setVisibility(View.GONE);
                 addButton.setVisibility(View.GONE);
 
+                try {
+                    idFriend = jsonObject.getString("id");
+                    username = jsonObject.getString("username");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
                 //Adding user to friendList ListView
-                friends.add(newUser);
+                friends.add(new User(idFriend, username, "pending"));
                 friends.notifyDataSetChanged();
 
                 Toast.makeText(this,"Friend added", Toast.LENGTH_LONG).show();
@@ -186,6 +170,32 @@ public class FriendActivity extends Activity implements AsyncResponse {
             else if(success.equals("0")){
                 Toast.makeText(this, "Add failed", Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    private void buildFriendListView(String jsonString){
+        //Reading friend list from JSON and populating ListView
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(jsonString);
+
+            JSONArray jsonArray = jsonObject.getJSONArray("friends");
+
+            friendList = new ArrayList<User>();
+
+            for(int i = 0; i < jsonArray.length(); i++){
+                String id = jsonArray.getJSONObject(i).getString("id");
+                String username = jsonArray.getJSONObject(i).getString("username");
+                String state = jsonArray.getJSONObject(i).getString("state");
+
+                friendList.add(new User(id, username, state));
+            }
+
+            friends = new FriendAdapter(this, friendList, id);
+            friendListView.setAdapter(friends);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }

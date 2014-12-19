@@ -10,12 +10,31 @@
         android:text="Medium Text"
         android:id="@+id/userTV" />
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:id="@+id/deleteButton"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:text="X" />
+        android:layout_alignParentRight="true" >
+
+        <TextView
+            android:id="@+id/infoTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="Request Sent"
+            android:gravity="center_vertical" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:id="@+id/acceptButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="V" />
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X" />
+    </LinearLayout>
 
 </RelativeLayout>

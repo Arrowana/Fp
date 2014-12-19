@@ -1,4 +1,4 @@
-package com.example.arowana.fappers;
+package com.arowana.fappers;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

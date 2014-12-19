@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="10sp"
         android:layout_below="@id/usernameTV"
-        android:background="#0FFFFF"
+        android:background="#000FFF"
         android:layout_marginTop="35sp"
         android:id="@+id/separator"/>
 
