@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/customshape" >
+        
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Titre" 
+            android:textSize="25sp"/>
+        <View
+            android:id="@+id/space"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_below="@id/title"
+            android:text="Titre"
+            android:background="#0F000000"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/space"
+            android:text="Note : x/5 y votes" />
+
+        <TextView
+            android:id="@+id/author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="35dp"
+            android:text="Auteur" />
+    </RelativeLayout>

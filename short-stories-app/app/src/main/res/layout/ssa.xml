@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+	<TextView
+	android:id="@+id/title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" 
+    android:text="Title"
+    android:textSize="30sp"/>
+	
+	<TextView 
+	android:id="@+id/author"
+	android:layout_below="@id/title"
+	android:layout_alignParentRight="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" 
+    android:text="Author"/>
+	
+	<TextView 
+	android:id="@+id/sep"
+	android:layout_below="@id/author"
+    android:layout_width="fill_parent"
+    android:layout_height="15sp" 
+    android:background="@color/grey" />
+	
+	<TextView 
+	android:id="@+id/text"
+	android:layout_below="@id/sep"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/text"  />"
+
+</RelativeLayout>
+</ScrollView>

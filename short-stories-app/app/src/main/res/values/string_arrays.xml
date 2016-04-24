@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="genre">
+        <item>Aventure</item>
+        <item>Comique</item>
+        <item>Dramatique</item>
+        <item>Historique</item>
+        <item>Polar</item>
+        <item>SF</item>
+        <item>Fantaisie</item>
+    </string-array>
+</resources>
